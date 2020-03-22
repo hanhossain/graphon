@@ -1,6 +1,7 @@
 ﻿using System;
 using Foundation;
 using UIKit;
+using XamarinGraph.ViewControllers;
 
 namespace NewSingleViewTemplate
 {
@@ -22,10 +23,7 @@ namespace NewSingleViewTemplate
 			{
 				Window = new UIWindow(UIScreen.MainScreen.Bounds)
 				{
-					RootViewController = new UIViewController()
-					{
-						View = { BackgroundColor = UIColor.SystemBackgroundColor }
-					},
+					RootViewController = new ChartTableViewController(),
 					WindowScene = windowScene
 				};
 				Window.MakeKeyAndVisible();
