@@ -19,7 +19,7 @@ namespace XamarinGraph.ViewControllers
 			var sineData = new List<ChartEntry>();
 
 			// generate sine wave [0, 2π]
-			for (double angle = -2 * Math.PI; angle <= 2 * Math.PI; angle += Math.PI / 8)
+			for (double angle = -2 * Math.PI; angle < 2 * Math.PI; angle += Math.PI / 8)
             {
 				sineData.Add(new ChartEntry()
 				{
@@ -27,6 +27,12 @@ namespace XamarinGraph.ViewControllers
 					Y = Math.Sin(angle)
 				});
             }
+
+			sineData.Add(new ChartEntry()
+			{
+				X = 2 * Math.PI,
+				Y = Math.Sin(2 * Math.PI)
+			});
 
 			var lineData = new LineData()
 			{
