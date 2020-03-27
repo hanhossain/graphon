@@ -80,7 +80,7 @@ namespace XamarinGraph.Core.UnitTests
 				new ChartEntry() { X = 1, Y = -9 }
 			};
 
-			var context = ChartContext.Create(entries);
+            var context = ChartContext.Create(entries);
 
 			Assert.Equal(-9, context.YMin);
 			Assert.Equal(0, context.YMax);
