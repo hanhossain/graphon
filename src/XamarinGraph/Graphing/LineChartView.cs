@@ -12,6 +12,7 @@ namespace XamarinGraph.Graphing
 	public class LineChartView : UIView
 	{
 		private const int AxisOffset = 20;
+		private const int EdgeOffset = 20;
 		private const int TickSize = 10;
 
 		private readonly IEnumerable<LineData> _lines;
@@ -60,22 +61,27 @@ namespace XamarinGraph.Graphing
 
 		public override void Draw(CGRect rect)
 		{
-			var chartSize = new CGSize(rect.Width - AxisOffset * 2, rect.Height - AxisOffset * 2);
+			var chartSize = new CGSize(rect.Width - EdgeOffset * 2, rect.Height - EdgeOffset * 2);
 
-			var transform = new CGAffineTransform(chartSize.Width / _chartContext.XRange, 0, 0, -chartSize.Height / _chartContext.YRange, AxisOffset, rect.Height - AxisOffset);
+			nfloat xCoefficient = chartSize.Width / _chartContext.Domain;
+			nfloat yCoefficient = -chartSize.Height / _chartContext.Range;
+			nfloat xDelta = Math.Abs(_chartContext.XMin) / (nfloat)_chartContext.Domain * chartSize.Width + EdgeOffset;
+			nfloat yDelta = chartSize.Height - Math.Abs(_chartContext.YMin) / (nfloat)_chartContext.Range * chartSize.Height + EdgeOffset;
+
+			var transform = new CGAffineTransform(xCoefficient, 0, 0, yCoefficient, xDelta, yDelta);
 
 			var (xValues, yValues) = _chartContext.GenerateAxesValues();
 
-			DrawXAxis(xValues, transform, rect);
-			DrawYAxis(yValues, transform, rect);
+            //DrawXAxis(xValues, transform, rect);
+            //DrawYAxis(yValues, transform, rect);
 
-			DrawXLabels(xValues, transform);
-			DrawYLabels(yValues, transform);
+            //DrawXLabels(xValues, transform);
+            //DrawYLabels(yValues, transform);
 
-			UpdateDataPoints(transform);
+            UpdateDataPoints(transform);
 
-			DrawLines(transform);
-		}
+            DrawLines(transform);
+        }
 
 		private void UpdateDataPoints(CGAffineTransform transform)
 		{
@@ -95,27 +101,29 @@ namespace XamarinGraph.Graphing
 		{
 			using var context = UIGraphics.GetCurrentContext();
 
+            // draw x-axis
 			context.AddLines(new[] { new CGPoint(AxisOffset, rect.Height - AxisOffset), new CGPoint(rect.Width - AxisOffset, rect.Height - AxisOffset) });
 
-			var topTransform = CGAffineTransform.MakeTranslation(0, -TickSize / 2);
-			var bottomTransform = CGAffineTransform.MakeTranslation(0, TickSize / 2);
+			//// draw ticks
+			//var tickTopTransform = CGAffineTransform.MakeTranslation(0, -TickSize / 2);
+			//var tickBottomTransform = CGAffineTransform.MakeTranslation(0, TickSize / 2);
 
-			foreach (int x in values)
-			{
-				// we don't need a tick at the y axis since we have that drawn
-				if (x == 0)
-				{
-					continue;
-				}
+			//foreach (int x in values)
+			//{
+			//	// we don't need a tick at the y axis since we have that drawn
+			//	if (x == 0)
+			//	{
+			//		continue;
+			//	}
 
-				var point = new CGPoint(x, 0);
-				var transformedPoint = transform.TransformPoint(point);
+			//	var point = new CGPoint(x, 0);
+			//	var transformedPoint = transform.TransformPoint(point);
 
-				var top = topTransform.TransformPoint(transformedPoint);
-				var bottom = bottomTransform.TransformPoint(transformedPoint);
+			//	var top = tickTopTransform.TransformPoint(transformedPoint);
+			//	var bottom = tickBottomTransform.TransformPoint(transformedPoint);
 
-				context.AddLines(new[] { top, bottom });
-			}
+			//	context.AddLines(new[] { top, bottom });
+			//}
 
 			UIColor.SystemGrayColor.SetStroke();
 

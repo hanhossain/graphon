@@ -14,13 +14,13 @@ namespace XamarinGraph.Core
 
 		public int XMax { get; private set; }
 
-		public int XRange => XMax - XMin;
+		public int Domain => XMax - XMin;
 
 		public int YMin { get; private set; }
 
 		public int YMax { get; private set; }
 
-		public int YRange => YMax - YMin;
+		public int Range => YMax - YMin;
 
 		public static ChartContext Create(IEnumerable<ChartEntry> entries)
 		{

@@ -16,15 +16,17 @@ namespace XamarinGraph.ViewControllers
 
 			View.BackgroundColor = UIColor.SystemBackgroundColor;
 
+			var sineData = new List<ChartEntry>();
+
 			// generate sine wave [0, 2π]
-			var sineData = Enumerable.Range(0, 9)
-                .Select(x => x * Math.PI / 4)
-                .Select(x => new ChartEntry()
-                {
-                    X = x,
-                    Y = Math.Sin(x)
-                })
-                .ToList();
+			for (double angle = -2 * Math.PI; angle <= 2 * Math.PI; angle += Math.PI / 8)
+            {
+				sineData.Add(new ChartEntry()
+				{
+					X = angle,
+					Y = Math.Sin(angle)
+				});
+            }
 
 			var lineData = new LineData()
 			{
