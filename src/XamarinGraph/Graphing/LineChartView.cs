@@ -72,8 +72,8 @@ namespace XamarinGraph.Graphing
 
 			var (xValues, yValues) = _chartContext.GenerateAxesValues();
 
-            //DrawXAxis(xValues, transform, rect);
-            //DrawYAxis(yValues, transform, rect);
+            DrawXAxis(xValues, transform);
+            DrawYAxis(yValues, transform);
 
             //DrawXLabels(xValues, transform);
             //DrawYLabels(yValues, transform);
@@ -97,66 +97,68 @@ namespace XamarinGraph.Graphing
 			}
 		}
 
-		private void DrawXAxis(IEnumerable<int> values, CGAffineTransform transform, CGRect rect)
+		private void DrawXAxis(IEnumerable<int> values, CGAffineTransform transform)
 		{
 			using var context = UIGraphics.GetCurrentContext();
 
-            // draw x-axis
-			context.AddLines(new[] { new CGPoint(AxisOffset, rect.Height - AxisOffset), new CGPoint(rect.Width - AxisOffset, rect.Height - AxisOffset) });
+			// draw x-axis
+			context.AddLines(new[] { transform.TransformPoint(new CGPoint(_chartContext.XMin, 0)), transform.TransformPoint(new CGPoint(_chartContext.XMax, 0)) });
 
-			//// draw ticks
-			//var tickTopTransform = CGAffineTransform.MakeTranslation(0, -TickSize / 2);
-			//var tickBottomTransform = CGAffineTransform.MakeTranslation(0, TickSize / 2);
+            // draw ticks
+            var tickTopTransform = CGAffineTransform.MakeTranslation(0, -TickSize / 2);
+            var tickBottomTransform = CGAffineTransform.MakeTranslation(0, TickSize / 2);
 
-			//foreach (int x in values)
-			//{
-			//	// we don't need a tick at the y axis since we have that drawn
-			//	if (x == 0)
-			//	{
-			//		continue;
-			//	}
+            foreach (int x in values)
+            {
+                // we don't need a tick at the y axis since we have that drawn
+                if (x == 0)
+                {
+                    continue;
+                }
 
-			//	var point = new CGPoint(x, 0);
-			//	var transformedPoint = transform.TransformPoint(point);
+                var point = new CGPoint(x, 0);
+                var transformedPoint = transform.TransformPoint(point);
 
-			//	var top = tickTopTransform.TransformPoint(transformedPoint);
-			//	var bottom = tickBottomTransform.TransformPoint(transformedPoint);
+                var top = tickTopTransform.TransformPoint(transformedPoint);
+                var bottom = tickBottomTransform.TransformPoint(transformedPoint);
 
-			//	context.AddLines(new[] { top, bottom });
-			//}
+                context.AddLines(new[] { top, bottom });
+            }
 
-			UIColor.SystemGrayColor.SetStroke();
+            UIColor.SystemGrayColor.SetStroke();
 
 			context.SetLineWidth(1);
 			context.StrokePath();
 		}
 
-		private void DrawYAxis(IEnumerable<int> values, CGAffineTransform transform, CGRect rect)
+		private void DrawYAxis(IEnumerable<int> values, CGAffineTransform transform)
 		{
 			using var context = UIGraphics.GetCurrentContext();
 
-			context.AddLines(new[] { new CGPoint(AxisOffset, AxisOffset), new CGPoint(AxisOffset, rect.Height - AxisOffset) });
+			// draw y-axis
+			context.AddLines(new[] { transform.TransformPoint(new CGPoint(0, _chartContext.YMin)), transform.TransformPoint(new CGPoint(0, _chartContext.YMax)) });
 
-			var leadingTransform = CGAffineTransform.MakeTranslation(-TickSize / 2, 0);
-			var trailingTransform = CGAffineTransform.MakeTranslation(TickSize / 2, 0);
+            // draw ticks
+            var leadingTransform = CGAffineTransform.MakeTranslation(-TickSize / 2, 0);
+            var trailingTransform = CGAffineTransform.MakeTranslation(TickSize / 2, 0);
 
-			foreach (int y in values)
-			{
-				// we don't need a tick at the x axis since we have that drawn
-				if (y == 0)
-				{
-					continue;
-				}
+            foreach (int y in values)
+            {
+                // we don't need a tick at the x axis since we have that drawn
+                if (y == 0)
+                {
+                    continue;
+                }
 
-				var point = new CGPoint(0, y);
-				var transformedPoint = transform.TransformPoint(point);
+                var point = new CGPoint(0, y);
+                var transformedPoint = transform.TransformPoint(point);
 
-				var leading = leadingTransform.TransformPoint(transformedPoint);
-				var trailing = trailingTransform.TransformPoint(transformedPoint);
-				context.AddLines(new[] { leading, trailing });
-			}
+                var leading = leadingTransform.TransformPoint(transformedPoint);
+                var trailing = trailingTransform.TransformPoint(transformedPoint);
+                context.AddLines(new[] { leading, trailing });
+            }
 
-			UIColor.SystemGrayColor.SetStroke();
+            UIColor.SystemGrayColor.SetStroke();
 
 			context.SetLineWidth(1);
 			context.StrokePath();
