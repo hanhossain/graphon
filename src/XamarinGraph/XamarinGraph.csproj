@@ -13,6 +13,7 @@
         <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
         <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
         <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
         <DebugSymbols>true</DebugSymbols>
@@ -117,6 +118,7 @@
         <Folder Include="Resources\" />
         <Folder Include="ViewControllers\" />
         <Folder Include="Extensions\" />
+        <Folder Include="Graphing\" />
     </ItemGroup>
     <ItemGroup>
         <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -131,6 +133,19 @@
         <Compile Include="SceneDelegate.cs" />
         <Compile Include="ViewControllers\ChartTableViewController.cs" />
         <Compile Include="Extensions\UITableViewExtensions.cs" />
+        <Compile Include="Graphing\LineData.cs" />
+        <Compile Include="Graphing\DataPointView.cs" />
+        <Compile Include="Extensions\ChartEntryExtensions.cs" />
+        <Compile Include="Extensions\CGPointExtensions.cs" />
+        <Compile Include="Extensions\CGContextExtensions.cs" />
+        <Compile Include="Graphing\LineChartView.cs" />
+        <Compile Include="ViewControllers\LineChartViewController.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\XamarinGraph.Core\XamarinGraph.Core.csproj">
+        <Project>{58542AC2-67EE-4237-85AA-83A4D6B5EE1E}</Project>
+        <Name>XamarinGraph.Core</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

@@ -23,7 +23,7 @@ namespace NewSingleViewTemplate
 			{
 				Window = new UIWindow(UIScreen.MainScreen.Bounds)
 				{
-					RootViewController = new ChartTableViewController(),
+					RootViewController = new UINavigationController(new ChartTableViewController()),
 					WindowScene = windowScene
 				};
 				Window.MakeKeyAndVisible();

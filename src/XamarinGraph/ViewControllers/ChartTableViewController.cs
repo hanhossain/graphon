@@ -23,9 +23,15 @@ namespace XamarinGraph.ViewControllers
 		{
 			var cell = tableView.DequeueReusableCell(CellId, indexPath);
 
-			cell.TextLabel.Text = "hello world";
+			cell.TextLabel.Text = "Line Chart";
 
 			return cell;
+		}
+
+		public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+		{
+			var lineChartViewController = new LineChartViewController();
+			NavigationController.PushViewController(lineChartViewController, true);
 		}
 	}
 }
