@@ -75,8 +75,8 @@ namespace XamarinGraph.Graphing
             DrawXAxis(xValues, transform);
             DrawYAxis(yValues, transform);
 
-            //DrawXLabels(xValues, transform);
-            //DrawYLabels(yValues, transform);
+            DrawXLabels(xValues, transform);
+            DrawYLabels(yValues, transform);
 
             UpdateDataPoints(transform);
 
