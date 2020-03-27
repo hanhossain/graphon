@@ -143,7 +143,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\XamarinGraph.Core\XamarinGraph.Core.csproj">
-        <Project>{58542AC2-67EE-4237-85AA-83A4D6B5EE1E}</Project>
+        <Project>{6C883442-CA90-4C2F-B940-072FCBDD4C9D}</Project>
         <Name>XamarinGraph.Core</Name>
       </ProjectReference>
     </ItemGroup>

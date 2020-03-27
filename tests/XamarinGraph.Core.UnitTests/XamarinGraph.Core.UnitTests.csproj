@@ -16,6 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\XamarinGraph.Core\XamarinGraph.Core.csproj" />
+	  <ProjectReference Include="..\..\src\XamarinGraph.Core\XamarinGraph.Core.csproj" />
 	</ItemGroup>
 </Project>
