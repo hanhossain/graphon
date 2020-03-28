@@ -20,10 +20,10 @@ namespace XamarinGraph.Core.UnitTests
 
 			Assert.Equal(0, context.XMin);
 			Assert.Equal(5, context.XMax);
-			Assert.Equal(5, context.XRange);
+			Assert.Equal(5, context.Domain);
 			Assert.Equal(0, context.YMin);
 			Assert.Equal(5, context.YMax);
-			Assert.Equal(5, context.YRange);
+			Assert.Equal(5, context.Range);
 		}
 
 		[Fact]
