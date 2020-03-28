@@ -15,7 +15,7 @@ namespace Graphon.iOS.Views
 		private const int TickSize = 10;
 
 		private readonly double _pointSize;
-		private readonly ILineChartDataSource _chartDataSource;
+		private readonly IChartDataSource _chartDataSource;
 
 		private IEnumerable<LineData> _lines;
 		private ChartContext _chartContext;
@@ -27,7 +27,7 @@ namespace Graphon.iOS.Views
 			Font = UIFont.PreferredCaption2
 		};
 
-        public LineChartView(ILineChartDataSource chartDataSource)
+        public LineChartView(IChartDataSource chartDataSource)
         {
 			_chartDataSource = chartDataSource ?? throw new ArgumentNullException(nameof(chartDataSource));
 			_pointSize = 10;

@@ -50,7 +50,7 @@
         <Compile Include="Views\LineChartView.cs" />
         <Compile Include="Extensions\CGPointExtensions.cs" />
         <Compile Include="Extensions\ChartEntryExtensions.cs" />
-        <Compile Include="ILineChartDataSource.cs" />
+        <Compile Include="IChartDataSource.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">

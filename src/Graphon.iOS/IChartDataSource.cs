@@ -2,7 +2,7 @@
 
 namespace Graphon.iOS
 {
-    public interface ILineChartDataSource
+    public interface IChartDataSource
     {
         IEnumerable<LineData> GetChartData();
     }

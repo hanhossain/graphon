@@ -7,7 +7,7 @@ using UIKit;
 
 namespace Graphon.ViewControllers
 {
-	public class LineChartViewController : UIViewController, ILineChartDataSource
+	public class LineChartViewController : UIViewController, IChartDataSource
 	{
         public override void ViewDidLoad()
 		{
