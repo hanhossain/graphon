@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Graphon.Core;
-using Graphon.Graphing;
+using Graphon.iOS;
+using Graphon.iOS.Views;
 using UIKit;
 
 namespace Graphon.ViewControllers

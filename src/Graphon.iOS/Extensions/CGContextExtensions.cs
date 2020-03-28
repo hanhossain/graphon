@@ -1,6 +1,7 @@
 ﻿using System;
+using CoreGraphics;
 
-namespace CoreGraphics
+namespace Graphon.iOS.Extensions
 {
 	public static class CGContextExtensions
 	{

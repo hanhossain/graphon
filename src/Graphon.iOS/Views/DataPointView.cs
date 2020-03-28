@@ -1,7 +1,8 @@
 ﻿using CoreGraphics;
+using Graphon.iOS.Extensions;
 using UIKit;
 
-namespace Graphon.Graphing
+namespace Graphon.iOS.Views
 {
 	public class DataPointView : UIView
 	{
@@ -36,8 +37,8 @@ namespace Graphon.Graphing
 		{
 			using var context = UIGraphics.GetCurrentContext();
 
-			context.AddCircle(rect.GetMidX(), rect.GetMidY(), rect.Height / 2);
-			context.SetLineWidth(0);
+            context.AddCircle(rect.GetMidX(), rect.GetMidY(), rect.Height / 2);
+            context.SetLineWidth(0);
 			context.SetFillColor(Color.CGColor);
 			context.DrawPath(CGPathDrawingMode.Fill);
 		}

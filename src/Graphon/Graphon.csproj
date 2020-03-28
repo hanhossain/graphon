@@ -118,7 +118,6 @@
         <Folder Include="Resources\" />
         <Folder Include="ViewControllers\" />
         <Folder Include="Extensions\" />
-        <Folder Include="Graphing\" />
     </ItemGroup>
     <ItemGroup>
         <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -133,19 +132,17 @@
         <Compile Include="SceneDelegate.cs" />
         <Compile Include="ViewControllers\ChartTableViewController.cs" />
         <Compile Include="Extensions\UITableViewExtensions.cs" />
-        <Compile Include="Graphing\LineData.cs" />
-        <Compile Include="Graphing\DataPointView.cs" />
-        <Compile Include="Extensions\ChartEntryExtensions.cs" />
-        <Compile Include="Extensions\CGPointExtensions.cs" />
-        <Compile Include="Extensions\CGContextExtensions.cs" />
-        <Compile Include="Graphing\LineChartView.cs" />
         <Compile Include="ViewControllers\LineChartViewController.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">
+        <ProjectReference Include="..\Graphon.iOS\Graphon.iOS.csproj">
+            <Project>{56FDB5FB-8180-41F0-A158-4EC3967A18A9}</Project>
+            <Name>Graphon.iOS</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">
         <Project>{6C883442-CA90-4C2F-B940-072FCBDD4C9D}</Project>
-        <Name>Graphon.Core</Name>
-      </ProjectReference>
+            <Name>Graphon.Core</Name>
+        </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

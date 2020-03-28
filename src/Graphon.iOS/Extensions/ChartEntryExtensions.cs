@@ -1,7 +1,7 @@
 ﻿using CoreGraphics;
 using Graphon.Core;
 
-namespace Graphon.Extensions
+namespace Graphon.iOS.Extensions
 {
 	public static class ChartEntryExtensions
 	{

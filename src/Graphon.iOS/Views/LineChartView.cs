@@ -4,14 +4,13 @@ using System.Linq;
 using CoreGraphics;
 using Foundation;
 using Graphon.Core;
-using Graphon.Extensions;
+using Graphon.iOS.Extensions;
 using UIKit;
 
-namespace Graphon.Graphing
+namespace Graphon.iOS.Views
 {
 	public class LineChartView : UIView
 	{
-		private const int AxisOffset = 20;
 		private const int EdgeOffset = 20;
 		private const int TickSize = 10;
 
@@ -72,16 +71,16 @@ namespace Graphon.Graphing
 
 			var (xValues, yValues) = _chartContext.GenerateAxesValues();
 
-            DrawXAxis(xValues, transform);
-            DrawYAxis(yValues, transform);
+			DrawXAxis(xValues, transform);
+			DrawYAxis(yValues, transform);
 
-            DrawXLabels(xValues, transform);
-            DrawYLabels(yValues, transform);
+			DrawXLabels(xValues, transform);
+			DrawYLabels(yValues, transform);
 
-            UpdateDataPoints(transform);
+			UpdateDataPoints(transform);
 
-            DrawLines(transform);
-        }
+			DrawLines(transform);
+		}
 
 		private void UpdateDataPoints(CGAffineTransform transform)
 		{
@@ -104,28 +103,28 @@ namespace Graphon.Graphing
 			// draw x-axis
 			context.AddLines(new[] { transform.TransformPoint(new CGPoint(_chartContext.XMin, 0)), transform.TransformPoint(new CGPoint(_chartContext.XMax, 0)) });
 
-            // draw ticks
-            var tickTopTransform = CGAffineTransform.MakeTranslation(0, -TickSize / 2);
-            var tickBottomTransform = CGAffineTransform.MakeTranslation(0, TickSize / 2);
+			// draw ticks
+			var tickTopTransform = CGAffineTransform.MakeTranslation(0, -TickSize / 2);
+			var tickBottomTransform = CGAffineTransform.MakeTranslation(0, TickSize / 2);
 
-            foreach (int x in values)
-            {
-                // we don't need a tick at the y axis since we have that drawn
-                if (x == 0)
-                {
-                    continue;
-                }
+			foreach (int x in values)
+			{
+				// we don't need a tick at the y axis since we have that drawn
+				if (x == 0)
+				{
+					continue;
+				}
 
-                var point = new CGPoint(x, 0);
-                var transformedPoint = transform.TransformPoint(point);
+				var point = new CGPoint(x, 0);
+				var transformedPoint = transform.TransformPoint(point);
 
-                var top = tickTopTransform.TransformPoint(transformedPoint);
-                var bottom = tickBottomTransform.TransformPoint(transformedPoint);
+				var top = tickTopTransform.TransformPoint(transformedPoint);
+				var bottom = tickBottomTransform.TransformPoint(transformedPoint);
 
-                context.AddLines(new[] { top, bottom });
-            }
+				context.AddLines(new[] { top, bottom });
+			}
 
-            UIColor.SystemGrayColor.SetStroke();
+			UIColor.SystemGrayColor.SetStroke();
 
 			context.SetLineWidth(1);
 			context.StrokePath();
@@ -138,27 +137,27 @@ namespace Graphon.Graphing
 			// draw y-axis
 			context.AddLines(new[] { transform.TransformPoint(new CGPoint(0, _chartContext.YMin)), transform.TransformPoint(new CGPoint(0, _chartContext.YMax)) });
 
-            // draw ticks
-            var leadingTransform = CGAffineTransform.MakeTranslation(-TickSize / 2, 0);
-            var trailingTransform = CGAffineTransform.MakeTranslation(TickSize / 2, 0);
+			// draw ticks
+			var leadingTransform = CGAffineTransform.MakeTranslation(-TickSize / 2, 0);
+			var trailingTransform = CGAffineTransform.MakeTranslation(TickSize / 2, 0);
 
-            foreach (int y in values)
-            {
-                // we don't need a tick at the x axis since we have that drawn
-                if (y == 0)
-                {
-                    continue;
-                }
+			foreach (int y in values)
+			{
+				// we don't need a tick at the x axis since we have that drawn
+				if (y == 0)
+				{
+					continue;
+				}
 
-                var point = new CGPoint(0, y);
-                var transformedPoint = transform.TransformPoint(point);
+				var point = new CGPoint(0, y);
+				var transformedPoint = transform.TransformPoint(point);
 
-                var leading = leadingTransform.TransformPoint(transformedPoint);
-                var trailing = trailingTransform.TransformPoint(transformedPoint);
-                context.AddLines(new[] { leading, trailing });
-            }
+				var leading = leadingTransform.TransformPoint(transformedPoint);
+				var trailing = trailingTransform.TransformPoint(transformedPoint);
+				context.AddLines(new[] { leading, trailing });
+			}
 
-            UIColor.SystemGrayColor.SetStroke();
+			UIColor.SystemGrayColor.SetStroke();
 
 			context.SetLineWidth(1);
 			context.StrokePath();
