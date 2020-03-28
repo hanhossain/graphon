@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using Graphon.Core;
 using UIKit;
-using XamarinGraph.Core;
 
-namespace XamarinGraph.Graphing
+namespace Graphon.Graphing
 {
 	public class LineData
 	{

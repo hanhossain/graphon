@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\XamarinGraph.Core\XamarinGraph.Core.csproj" />
+        <ProjectReference Include="..\..\src\Graphon.Core\Graphon.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />

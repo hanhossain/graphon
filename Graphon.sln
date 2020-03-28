@@ -5,13 +5,13 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C335A40B-7A2B-4C2B-9918-BD80552E1AF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinGraph", "src\XamarinGraph\XamarinGraph.csproj", "{1C72DC27-64BB-4F3B-8441-A61762156FA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphon", "src\Graphon\Graphon.csproj", "{1C72DC27-64BB-4F3B-8441-A61762156FA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinGraph.Core", "src\XamarinGraph.Core\XamarinGraph.Core.csproj", "{6C883442-CA90-4C2F-B940-072FCBDD4C9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphon.Core", "src\Graphon.Core\Graphon.Core.csproj", "{6C883442-CA90-4C2F-B940-072FCBDD4C9D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B37A363B-A5D8-4A6E-81C5-AB998CC23424}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinGraph.Core.UnitTests", "tests\XamarinGraph.Core.UnitTests\XamarinGraph.Core.UnitTests.csproj", "{E8B61775-45A1-4BC5-B47E-0546F006FC42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphon.Core.UnitTests", "tests\Graphon.Core.UnitTests\Graphon.Core.UnitTests.csproj", "{E8B61775-45A1-4BC5-B47E-0546F006FC42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

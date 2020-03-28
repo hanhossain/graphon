@@ -1,9 +1,9 @@
 ﻿using System;
 using Foundation;
+using Graphon.ViewControllers;
 using UIKit;
-using XamarinGraph.ViewControllers;
 
-namespace NewSingleViewTemplate
+namespace Graphon
 {
 	[Register("SceneDelegate")]
 	public class SceneDelegate : UIResponder, IUIWindowSceneDelegate

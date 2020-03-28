@@ -1,7 +1,7 @@
 ﻿using CoreGraphics;
 using UIKit;
 
-namespace XamarinGraph.Graphing
+namespace Graphon.Graphing
 {
 	public class DataPointView : UIView
 	{

@@ -2,7 +2,7 @@
 using Foundation;
 using UIKit;
 
-namespace XamarinGraph.ViewControllers
+namespace Graphon.ViewControllers
 {
 	public class ChartTableViewController : UITableViewController
 	{

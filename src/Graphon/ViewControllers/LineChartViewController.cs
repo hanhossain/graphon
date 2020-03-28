@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using XamarinGraph.Core;
-using XamarinGraph.Graphing;
+using Graphon.Core;
+using Graphon.Graphing;
 using UIKit;
 
-namespace XamarinGraph.ViewControllers
+namespace Graphon.ViewControllers
 {
 	public class LineChartViewController : UIViewController
 	{

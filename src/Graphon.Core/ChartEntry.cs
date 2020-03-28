@@ -1,4 +1,4 @@
-﻿namespace XamarinGraph.Core
+﻿namespace Graphon.Core
 {
 	public class ChartEntry
 	{

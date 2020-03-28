@@ -7,8 +7,8 @@
         <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <TemplateGuid>{edc1b0fa-90cd-4038-8fad-98fe74adb368}</TemplateGuid>
         <OutputType>Exe</OutputType>
-        <RootNamespace>XamarinGraph</RootNamespace>
-        <AssemblyName>XamarinGraph</AssemblyName>
+        <RootNamespace>Graphon</RootNamespace>
+        <AssemblyName>Graphon</AssemblyName>
         <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
         <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
         <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -142,9 +142,9 @@
         <Compile Include="ViewControllers\LineChartViewController.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\XamarinGraph.Core\XamarinGraph.Core.csproj">
+      <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">
         <Project>{6C883442-CA90-4C2F-B940-072FCBDD4C9D}</Project>
-        <Name>XamarinGraph.Core</Name>
+        <Name>Graphon.Core</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

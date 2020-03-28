@@ -1,7 +1,7 @@
 ﻿using CoreGraphics;
-using XamarinGraph.Core;
+using Graphon.Core;
 
-namespace XamarinGraph.Extensions
+namespace Graphon.Extensions
 {
 	public static class ChartEntryExtensions
 	{

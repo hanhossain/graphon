@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using CoreGraphics;
 using Foundation;
-using XamarinGraph.Core;
-using XamarinGraph.Extensions;
+using Graphon.Core;
+using Graphon.Extensions;
 using UIKit;
 
-namespace XamarinGraph.Graphing
+namespace Graphon.Graphing
 {
 	public class LineChartView : UIView
 	{

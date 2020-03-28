@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace XamarinGraph.Core
+namespace Graphon.Core
 {
 	public class ChartContext
 	{

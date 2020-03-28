@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace XamarinGraph
+namespace Graphon
 {
 	public class Application
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace XamarinGraph.Core.UnitTests
+namespace Graphon.Core.UnitTests
 {
 	public class ChartContextTests
 	{

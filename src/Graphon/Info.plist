@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>XamarinGraph</string>
+	<string>Graphon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.hanhossain.XamarinGraph</string>
+	<string>com.hanhossain.Graphon</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -60,6 +60,6 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleName</key>
-	<string>XamarinGraph</string>
+	<string>Graphon</string>
 </dict>
 </plist>
