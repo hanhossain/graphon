@@ -14,51 +14,36 @@ namespace Graphon.iOS.Views
 		private const int EdgeOffset = 20;
 		private const int TickSize = 10;
 
-		private readonly IEnumerable<LineData> _lines;
-		private readonly IEnumerable<IEnumerable<(ChartEntry Entry, DataPointView View)>> _entries;
-		private readonly ChartContext _chartContext;
-
 		private readonly double _pointSize;
+		private readonly ILineChartDataSource _chartDataSource;
 
-		private readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
+		private IEnumerable<LineData> _lines;
+		private ChartContext _chartContext;
+		private IEnumerable<IEnumerable<(ChartEntry Entry, DataPointView View)>> _entries;
+
+		private static readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
 		{
 			ForegroundColor = UIColor.SystemGrayColor,
 			Font = UIFont.PreferredCaption2
 		};
 
-		public LineChartView(params LineData[] lines)
-			: this(10, lines)
-		{
+        public LineChartView(ILineChartDataSource chartDataSource)
+        {
+			_chartDataSource = chartDataSource ?? throw new ArgumentNullException(nameof(chartDataSource));
+			_pointSize = 10;
+
+			LoadData();
 		}
 
-		public LineChartView(double pointSize, params LineData[] lines)
-		{
-			_pointSize = pointSize;
-			_lines = lines ?? throw new ArgumentNullException(nameof(lines));
-			_entries = lines
-				.Select(line => line.Entries
-					.Select(entry => (entry, new DataPointView()
-					{
-						Size = _pointSize,
-						Color = line.Color
-					}))
-					.ToList())
-				.ToList();
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
 
-			var chartEntries = _entries.SelectMany(x => x).Select(x => x.Entry).ToList();
-			_chartContext = ChartContext.Create(chartEntries);
+            // redraw when the rotation changes
+            SetNeedsDisplay();
+        }
 
-			var views = _entries.SelectMany(x => x.Select(y => y.View)).Reverse().ToArray();
-			AddSubviews(views);
-		}
-
-		public override void LayoutSubviews()
-		{
-			base.LayoutSubviews();
-			SetNeedsDisplay();
-		}
-
-		public override void Draw(CGRect rect)
+        public override void Draw(CGRect rect)
 		{
 			var chartSize = new CGSize(rect.Width - EdgeOffset * 2, rect.Height - EdgeOffset * 2);
 
@@ -80,6 +65,30 @@ namespace Graphon.iOS.Views
 			UpdateDataPoints(transform);
 
 			DrawLines(transform);
+		}
+
+		private void LoadData()
+		{
+			_lines = _chartDataSource.GetChartData() ?? Enumerable.Empty<LineData>();
+			_entries = _lines
+				.Select(line => line.Entries
+					.Select(entry => (entry, new DataPointView()
+					{
+						Size = _pointSize,
+						Color = line.Color
+					}))
+					.ToList())
+				.ToList();
+
+			var chartEntries = _entries.SelectMany(x => x).Select(x => x.Entry).ToList();
+			_chartContext = ChartContext.Create(chartEntries);
+
+			var views = _entries
+				.SelectMany(x => x.Select(y => y.View))
+				.Reverse()
+				.ToArray();
+
+			AddSubviews(views);
 		}
 
 		private void UpdateDataPoints(CGAffineTransform transform)
