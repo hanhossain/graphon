@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Graphon.Core;
 using Graphon.iOS;
 using Graphon.iOS.Views;
@@ -9,6 +10,8 @@ namespace Graphon.ViewControllers
 {
 	public class LineChartViewController : UIViewController, IChartDataSource
 	{
+		private List<(double Angle, double Amplitude)> _sineData = new List<(double Angle, double Amplitude)>();
+
         public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
@@ -23,36 +26,40 @@ namespace Graphon.ViewControllers
 
 			View.AddSubview(lineChartView);
 
+			NavigationItem.RightBarButtonItem = new UIBarButtonItem(UIBarButtonSystemItem.Add, (s, e) =>
+			{
+				(var lastAngle, _) = _sineData.Last();
+				var newAngle = lastAngle + Math.PI / 8;
+				_sineData.Add((newAngle, Math.Sin(newAngle)));
+
+				InvokeOnMainThread(() => lineChartView.ReloadData());
+			});
+
 			AddConstraints(lineChartView);
-		}
+
+            // generate sine wave [0, 2π]
+            for (double angle = -2 * Math.PI; angle < 2 * Math.PI; angle += Math.PI / 8)
+            {
+				_sineData.Add((angle, Math.Sin(angle)));
+            }
+
+			_sineData.Add((2 * Math.PI, Math.Sin(2 * Math.PI)));
+        }
 
 		public IEnumerable<LineData> GetChartData()
 		{
-			var sineData = new List<ChartEntry>();
-
-			// generate sine wave [0, 2π]
-			for (double angle = -2 * Math.PI; angle < 2 * Math.PI; angle += Math.PI / 8)
+			return new[]
 			{
-				sineData.Add(new ChartEntry()
+				new LineData()
 				{
-					X = angle,
-					Y = Math.Sin(angle)
-				});
-			}
-
-			sineData.Add(new ChartEntry()
-			{
-				X = 2 * Math.PI,
-				Y = Math.Sin(2 * Math.PI)
-			});
-
-			var lineData = new LineData()
-			{
-				Color = UIColor.SystemBlueColor,
-				Entries = sineData
+					Color = UIColor.SystemBlueColor,
+					Entries = _sineData.Select(x => new ChartEntry()
+					{
+						X = x.Angle,
+						Y = x.Amplitude
+					})
+				}
 			};
-
-			return new[] { lineData };
 		}
 
 		private void AddConstraints(LineChartView lineChartView)

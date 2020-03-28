@@ -20,6 +20,7 @@ namespace Graphon.iOS.Views
 		private IEnumerable<LineData> _lines;
 		private ChartContext _chartContext;
 		private IEnumerable<IEnumerable<(ChartEntry Entry, DataPointView View)>> _entries;
+		private bool _completedInitialLoad;
 
 		private static readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
 		{
@@ -31,13 +32,29 @@ namespace Graphon.iOS.Views
         {
 			_chartDataSource = chartDataSource ?? throw new ArgumentNullException(nameof(chartDataSource));
 			_pointSize = 10;
+		}
+
+        public void ReloadData()
+        {
+			// remove existing views
+			var views = _entries.SelectMany(x => x).Select(x => x.View).ToList();
+            foreach (var view in views)
+            {
+				view.RemoveFromSuperview();
+            }
 
 			LoadData();
-		}
+        }
 
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
+
+            if (!_completedInitialLoad)
+            {
+				LoadData();
+				_completedInitialLoad = true;
+            }
 
             // redraw when the rotation changes
             SetNeedsDisplay();
@@ -84,7 +101,8 @@ namespace Graphon.iOS.Views
 			_chartContext = ChartContext.Create(chartEntries);
 
 			var views = _entries
-				.SelectMany(x => x.Select(y => y.View))
+                .SelectMany(x => x)
+                .Select(x => x.View)
 				.Reverse()
 				.ToArray();
 
