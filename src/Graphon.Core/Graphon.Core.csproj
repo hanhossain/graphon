@@ -3,5 +3,12 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
+    <PropertyGroup>
+        <PackageId>Graphon.Core</PackageId>
+        <PackageVersion>1.0.0-alpha.20200401.1</PackageVersion>
+        <PackageProjectUrl>https://github.com/hanhossain/graphon</PackageProjectUrl>
+        <PackageOutputPath>bin\package</PackageOutputPath>
+        <Authors>Han Hossain</Authors>
+    </PropertyGroup>
 
 </Project>
