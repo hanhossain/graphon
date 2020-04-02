@@ -10,7 +10,7 @@ namespace Graphon.ViewControllers
 {
 	public class LineChartViewController : UIViewController, IChartDataSource
 	{
-		private List<(double Angle, double Amplitude)> _sineData = new List<(double Angle, double Amplitude)>();
+		private readonly List<(double Angle, double Amplitude)> _sineData = new List<(double Angle, double Amplitude)>();
 
         public override void ViewDidLoad()
 		{
