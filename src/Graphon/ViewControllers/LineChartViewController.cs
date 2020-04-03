@@ -8,18 +8,21 @@ using UIKit;
 
 namespace Graphon.ViewControllers
 {
-	public class LineChartViewController : UIViewController, IChartDataSource
+	public class LineChartViewController : UIViewController, IChartDataSource, IChartAxisSource<double, double>
 	{
 		private readonly List<(double Angle, double Amplitude)> _sineData = new List<(double Angle, double Amplitude)>();
 
-        public override void ViewDidLoad()
+		private List<int> _xValues;
+		private List<int> _yValues;
+
+		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 			Title = "Line Chart";
 
 			View.BackgroundColor = UIColor.SystemBackgroundColor;
 
-			var lineChartView = new LineChartView(this)
+			var lineChartView = new LineChartView<double, double>(this, this)
 			{
 				BackgroundColor = UIColor.SystemBackgroundColor
 			};
@@ -62,7 +65,30 @@ namespace Graphon.ViewControllers
 			};
 		}
 
-		private void AddConstraints(LineChartView lineChartView)
+        public double GetXValue(int index)
+        {
+			return _xValues[index];
+        }
+
+        public double GetYValue(int index)
+        {
+			return _yValues[index];
+        }
+
+        (int X, int Y) IChartAxisSource<double, double>.GetAxisTickCount()
+        {
+			var chartContext = ChartContext.Create(_sineData.Select(x => new ChartEntry()
+			{
+				X = x.Angle,
+				Y = x.Amplitude
+			}));
+
+			(_xValues, _yValues) = chartContext.GenerateAxesValues();
+
+			return (_xValues.Count, _yValues.Count);
+        }
+
+		private void AddConstraints(LineChartView<double, double> lineChartView)
         {
 			lineChartView.TranslatesAutoresizingMaskIntoConstraints = false;
 

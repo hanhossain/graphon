@@ -58,10 +58,11 @@
         <Compile Include="Extensions\CGPointExtensions.cs" />
         <Compile Include="Extensions\ChartEntryExtensions.cs" />
         <Compile Include="IChartDataSource.cs" />
+        <Compile Include="IChartAxisSource.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">
-            <Project>{DFD6815B-5FDF-46FC-9BD0-1D25D7C5561C}</Project>
+            <Project>{6C883442-CA90-4C2F-B940-072FCBDD4C9D}</Project>
             <Name>Graphon.Core</Name>
         </ProjectReference>
     </ItemGroup>
