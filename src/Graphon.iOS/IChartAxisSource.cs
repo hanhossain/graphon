@@ -7,7 +7,7 @@ namespace Graphon.iOS
         where Tx : struct
         where Ty : struct
     {
-        #region Requried Methods
+        #region Required Methods
 
         Tx GetXAxisValue(int index);
 
