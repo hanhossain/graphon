@@ -8,9 +8,9 @@ namespace Graphon.iOS
     {
         #region Requried Methods
 
-        Tx GetXValue(int index);
+        Tx GetXAxisValue(int index);
 
-        Ty GetYValue(int index);
+        Ty GetYAxisValue(int index);
 
         #endregion
 

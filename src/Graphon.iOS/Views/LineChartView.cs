@@ -79,25 +79,8 @@ namespace Graphon.iOS.Views
 
 			using var context = UIGraphics.GetCurrentContext();
 
-			// draw x-axis
-			context.AddLines(new[] { transform.TransformPoint(new CGPoint(_chartContext.XMin, 0)), transform.TransformPoint(new CGPoint(_chartContext.XMax, 0)) });
-
-			for (int i = 0; i < xCount; i++)
-			{
-				Tx x = _chartAxisSource.GetXValue(i);
-				DrawXTick(x, transform, context);
-				DrawXLabel(x, transform);
-			}
-
-			// draw y-axis
-			context.AddLines(new[] { transform.TransformPoint(new CGPoint(0, _chartContext.YMin)), transform.TransformPoint(new CGPoint(0, _chartContext.YMax)) });
-
-			for (int i = 0; i < yCount; i++)
-			{
-				Ty y = _chartAxisSource.GetYValue(i);
-				DrawYTick(y, transform, context);
-				DrawYLabel(y, transform);
-			}
+			DrawXAxis(context, transform, xCount);
+			DrawYAxis(context, transform, yCount);
 
 			UIColor.SystemGrayColor.SetStroke();
 
@@ -145,6 +128,30 @@ namespace Graphon.iOS.Views
 				{
 					view.Point = calculatedPoint;
 				}
+			}
+		}
+
+        private void DrawXAxis(CGContext context, CGAffineTransform transform, int xCount)
+        {
+			context.AddLines(new[] { transform.TransformPoint(new CGPoint(_chartContext.XMin, 0)), transform.TransformPoint(new CGPoint(_chartContext.XMax, 0)) });
+
+			for (int i = 0; i < xCount; i++)
+			{
+				Tx x = _chartAxisSource.GetXAxisValue(i);
+				DrawXTick(x, transform, context);
+				DrawXLabel(x, transform);
+			}
+		}
+
+        private void DrawYAxis(CGContext context, CGAffineTransform transform, int yCount)
+        {
+			context.AddLines(new[] { transform.TransformPoint(new CGPoint(0, _chartContext.YMin)), transform.TransformPoint(new CGPoint(0, _chartContext.YMax)) });
+
+			for (int i = 0; i < yCount; i++)
+			{
+				Ty y = _chartAxisSource.GetYAxisValue(i);
+				DrawYTick(y, transform, context);
+				DrawYLabel(y, transform);
 			}
 		}
 

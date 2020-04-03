@@ -59,6 +59,7 @@
         <Compile Include="Extensions\ChartEntryExtensions.cs" />
         <Compile Include="IChartDataSource.cs" />
         <Compile Include="IChartAxisSource.cs" />
+        <Compile Include="ChartAxisSource.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">

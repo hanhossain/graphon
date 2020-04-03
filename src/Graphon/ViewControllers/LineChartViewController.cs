@@ -8,12 +8,9 @@ using UIKit;
 
 namespace Graphon.ViewControllers
 {
-	public class LineChartViewController : UIViewController, IChartDataSource, IChartAxisSource<double, double>
+	public class LineChartViewController : UIViewController, IChartDataSource
 	{
 		private readonly List<(double Angle, double Amplitude)> _sineData = new List<(double Angle, double Amplitude)>();
-
-		private List<int> _xValues;
-		private List<int> _yValues;
 
 		public override void ViewDidLoad()
 		{
@@ -22,7 +19,21 @@ namespace Graphon.ViewControllers
 
 			View.BackgroundColor = UIColor.SystemBackgroundColor;
 
-			var lineChartView = new LineChartView<double, double>(this, this)
+			// generate sine wave [0, 2π]
+			for (double angle = -2 * Math.PI; angle < 2 * Math.PI; angle += Math.PI / 8)
+			{
+				_sineData.Add((angle, Math.Sin(angle)));
+			}
+
+			_sineData.Add((2 * Math.PI, Math.Sin(2 * Math.PI)));
+
+			var axisSource = new ChartAxisSource(() => _sineData.Select(x => new ChartEntry()
+            {
+                X = x.Angle,
+                Y = x.Amplitude
+            }));
+
+			var lineChartView = new LineChartView<double, double>(this, axisSource)
 			{
 				BackgroundColor = UIColor.SystemBackgroundColor
 			};
@@ -39,15 +50,19 @@ namespace Graphon.ViewControllers
 			});
 
 			AddConstraints(lineChartView);
-
-            // generate sine wave [0, 2π]
-            for (double angle = -2 * Math.PI; angle < 2 * Math.PI; angle += Math.PI / 8)
-            {
-				_sineData.Add((angle, Math.Sin(angle)));
-            }
-
-			_sineData.Add((2 * Math.PI, Math.Sin(2 * Math.PI)));
         }
+
+		private void AddConstraints(LineChartView<double, double> lineChartView)
+		{
+			lineChartView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+			lineChartView.LeadingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.LeadingAnchor).Active = true;
+			lineChartView.TrailingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TrailingAnchor).Active = true;
+			lineChartView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
+			lineChartView.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor).Active = true;
+		}
+
+		#region IChartDataSource
 
 		public IEnumerable<LineData> GetChartData()
 		{
@@ -65,37 +80,6 @@ namespace Graphon.ViewControllers
 			};
 		}
 
-        public double GetXValue(int index)
-        {
-			return _xValues[index];
-        }
-
-        public double GetYValue(int index)
-        {
-			return _yValues[index];
-        }
-
-        (int X, int Y) IChartAxisSource<double, double>.GetAxisTickCount()
-        {
-			var chartContext = ChartContext.Create(_sineData.Select(x => new ChartEntry()
-			{
-				X = x.Angle,
-				Y = x.Amplitude
-			}));
-
-			(_xValues, _yValues) = chartContext.GenerateAxesValues();
-
-			return (_xValues.Count, _yValues.Count);
-        }
-
-		private void AddConstraints(LineChartView<double, double> lineChartView)
-        {
-			lineChartView.TranslatesAutoresizingMaskIntoConstraints = false;
-
-			lineChartView.LeadingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.LeadingAnchor).Active = true;
-			lineChartView.TrailingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TrailingAnchor).Active = true;
-			lineChartView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
-			lineChartView.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor).Active = true;
-		}
+		#endregion
 	}
 }
