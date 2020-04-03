@@ -17,21 +17,21 @@ namespace Graphon.iOS.Views
 		private const int TickSize = 10;
 
 		private readonly double _pointSize;
-		private readonly IChartDataSource _chartDataSource;
+		private readonly IChartDataSource<Tx, Ty> _chartDataSource;
 		private readonly IChartAxisSource<Tx, Ty> _chartAxisSource;
 
-		private IEnumerable<LineData> _lines;
-		private ChartContext _chartContext;
-		private IEnumerable<IEnumerable<(ChartEntry Entry, DataPointView View)>> _entries;
+		private readonly List<LineData<Tx, Ty>> _lines = new List<LineData<Tx, Ty>>();
+
+		private IEnumerable<IEnumerable<(ChartEntry<Tx, Ty> Entry, DataPointView View)>> _entries;
 		private bool _completedInitialLoad;
 
-		private static readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
+		private readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
 		{
 			ForegroundColor = UIColor.SystemGrayColor,
 			Font = UIFont.PreferredCaption2
 		};
 
-		public LineChartView(IChartDataSource chartDataSource, IChartAxisSource<Tx, Ty> chartAxisSource)
+		public LineChartView(IChartDataSource<Tx, Ty> chartDataSource, IChartAxisSource<Tx, Ty> chartAxisSource)
         {
 			_chartDataSource = chartDataSource ?? throw new ArgumentNullException(nameof(chartDataSource));
 			_chartAxisSource = chartAxisSource ?? throw new ArgumentNullException(nameof(chartAxisSource));
@@ -67,11 +67,22 @@ namespace Graphon.iOS.Views
         public override void Draw(CGRect rect)
 		{
 			var chartSize = new CGSize(rect.Width - EdgeOffset * 2, rect.Height - EdgeOffset * 2);
+			
+			// get bounds in original coordinate system
+			var bounds = _chartAxisSource.GetBoundsContext();
+			
+			// map original coordinate system to int based coordinate system
+			nfloat xMin = (nfloat)_chartAxisSource.MapToXCoordinate(bounds.XMin);
+			nfloat xMax = (nfloat)_chartAxisSource.MapToXCoordinate(bounds.XMax);
+			nfloat yMin = (nfloat)_chartAxisSource.MapToYCoordinate(bounds.YMin);
+			nfloat yMax = (nfloat)_chartAxisSource.MapToYCoordinate(bounds.YMax);
+			nfloat domain = xMax - xMin;
+			nfloat range = yMax - yMin;
 
-			nfloat xCoefficient = chartSize.Width / _chartContext.Domain;
-			nfloat yCoefficient = -chartSize.Height / _chartContext.Range;
-			nfloat xDelta = Math.Abs(_chartContext.XMin) / (nfloat)_chartContext.Domain * chartSize.Width + EdgeOffset;
-			nfloat yDelta = chartSize.Height - Math.Abs(_chartContext.YMin) / (nfloat)_chartContext.Range * chartSize.Height + EdgeOffset;
+			nfloat xCoefficient = chartSize.Width / domain;
+			nfloat yCoefficient = -chartSize.Height / range;
+			nfloat xDelta = (nfloat)Math.Abs(xMin) / domain * chartSize.Width + EdgeOffset;
+			nfloat yDelta = chartSize.Height - (nfloat)Math.Abs(yMin) / range * chartSize.Height + EdgeOffset;
 
 			var transform = new CGAffineTransform(xCoefficient, 0, 0, yCoefficient, xDelta, yDelta);
 
@@ -79,8 +90,8 @@ namespace Graphon.iOS.Views
 
 			using var context = UIGraphics.GetCurrentContext();
 
-			DrawXAxis(context, transform, xCount);
-			DrawYAxis(context, transform, yCount);
+			DrawXAxis(context, transform, xCount, xMin, xMax);
+			DrawYAxis(context, transform, yCount, yMin, yMax);
 
 			UIColor.SystemGrayColor.SetStroke();
 
@@ -94,7 +105,26 @@ namespace Graphon.iOS.Views
 
 		private void LoadData()
 		{
-			_lines = _chartDataSource.GetChartData() ?? Enumerable.Empty<LineData>();
+			int lineCount = _chartDataSource.NumberOfLines();
+			for (int lineIndex = 0; lineIndex < lineCount; lineIndex++)
+			{
+				UIColor color = _chartDataSource.GetLineColor(lineIndex);
+				int pointCount = _chartDataSource.NumberOfPoints(lineIndex);
+
+				var entries = new List<ChartEntry<Tx, Ty>>();
+				for (int pointIndex = 0; pointIndex < pointCount; pointIndex++)
+				{
+					var indexPath = NSIndexPath.FromRowSection(pointIndex, lineIndex);
+					entries.Add(_chartDataSource.GetEntry(indexPath));
+				}
+				
+				_lines.Add(new LineData<Tx, Ty>()
+				{
+					Color = color,
+					Entries = entries
+				});
+			}
+			
 			_entries = _lines
 				.Select(line => line.Entries
 					.Select(entry => (entry, new DataPointView()
@@ -104,9 +134,6 @@ namespace Graphon.iOS.Views
 					}))
 					.ToList())
 				.ToList();
-
-			var chartEntries = _entries.SelectMany(x => x).Select(x => x.Entry).ToList();
-			_chartContext = ChartContext.Create(chartEntries);
 
 			var views = _entries
                 .SelectMany(x => x)
@@ -122,7 +149,7 @@ namespace Graphon.iOS.Views
 			foreach (var (entry, view) in _entries.SelectMany(x => x))
 			{
 				double shift = -_pointSize / 2.0;
-				var calculatedPoint = transform.TransformPoint(entry.AsPoint()).Translate(shift, shift);
+				var calculatedPoint = transform.TransformPoint(entry.AsPoint(_chartAxisSource)).Translate(shift, shift);
 
 				if (!view.Point.IsEqualTo(calculatedPoint))
 				{
@@ -131,9 +158,9 @@ namespace Graphon.iOS.Views
 			}
 		}
 
-        private void DrawXAxis(CGContext context, CGAffineTransform transform, int xCount)
+        private void DrawXAxis(CGContext context, CGAffineTransform transform, int xCount, nfloat xMin, nfloat xMax)
         {
-			context.AddLines(new[] { transform.TransformPoint(new CGPoint(_chartContext.XMin, 0)), transform.TransformPoint(new CGPoint(_chartContext.XMax, 0)) });
+			context.AddLines(new[] { transform.TransformPoint(new CGPoint(xMin, 0)), transform.TransformPoint(new CGPoint(xMax, 0)) });
 
 			for (int i = 0; i < xCount; i++)
 			{
@@ -143,9 +170,9 @@ namespace Graphon.iOS.Views
 			}
 		}
 
-        private void DrawYAxis(CGContext context, CGAffineTransform transform, int yCount)
+        private void DrawYAxis(CGContext context, CGAffineTransform transform, int yCount, nfloat yMin, nfloat yMax)
         {
-			context.AddLines(new[] { transform.TransformPoint(new CGPoint(0, _chartContext.YMin)), transform.TransformPoint(new CGPoint(0, _chartContext.YMax)) });
+			context.AddLines(new[] { transform.TransformPoint(new CGPoint(0, yMin)), transform.TransformPoint(new CGPoint(0, yMax)) });
 
 			for (int i = 0; i < yCount; i++)
 			{
@@ -237,10 +264,13 @@ namespace Graphon.iOS.Views
 		private void DrawLines(CGAffineTransform transform)
 		{
 			using var context = UIGraphics.GetCurrentContext();
-
-			foreach (var line in _lines.Reverse())
+			
+			// foreach (var line in _lines.Reverse())
+			for (int i = _lines.Count - 1; i >= 0; i--)
 			{
-				var points = line.Entries.Select(x => transform.TransformPoint(x.AsPoint())).ToArray();
+				var line = _lines[i];
+				
+				var points = line.Entries.Select(x => transform.TransformPoint(x.AsPoint(_chartAxisSource))).ToArray();
 				context.AddLines(points);
 				line.Color.SetStroke();
 				context.SetLineWidth(1);

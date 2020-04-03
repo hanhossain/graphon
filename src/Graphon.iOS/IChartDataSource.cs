@@ -1,9 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Foundation;
+using Graphon.Core;
+using UIKit;
 
 namespace Graphon.iOS
 {
-    public interface IChartDataSource
+    public interface IChartDataSource<Tx, Ty>
+        where Tx : struct
+        where Ty : struct
     {
-        IEnumerable<LineData> GetChartData();
+        int NumberOfLines();
+
+        int NumberOfPoints(int lineIndex);
+
+        UIColor GetLineColor(int lineIndex);
+
+        ChartEntry<Tx, Ty> GetEntry(NSIndexPath indexPath);
     }
 }

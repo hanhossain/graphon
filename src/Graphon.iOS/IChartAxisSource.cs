@@ -1,4 +1,5 @@
 ﻿using System;
+using Graphon.Core;
 
 namespace Graphon.iOS
 {
@@ -12,6 +13,10 @@ namespace Graphon.iOS
 
         Ty GetYAxisValue(int index);
 
+        BoundsContext<Tx, Ty> GetBoundsContext();
+        
+        (int X, int Y) GetAxisTickCount();
+        
         #endregion
 
         #region Optional Methods
@@ -70,11 +75,6 @@ namespace Graphon.iOS
                 double y => y,
                 _ => throw new NotImplementedException()
             };
-        }
-
-        (int X, int Y) GetAxisTickCount()
-        {
-            return (0, 0);
         }
 
         string GetXLabel(Tx value)

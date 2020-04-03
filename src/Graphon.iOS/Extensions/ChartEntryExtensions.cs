@@ -5,9 +5,13 @@ namespace Graphon.iOS.Extensions
 {
 	public static class ChartEntryExtensions
 	{
-		public static CGPoint AsPoint(this ChartEntry entry)
+		public static CGPoint AsPoint<Tx, Ty>(this ChartEntry<Tx, Ty> entry, IChartAxisSource<Tx, Ty> chartAxisSource)
+			where Tx : struct
+			where Ty : struct
 		{
-			return new CGPoint(entry.X, entry.Y);
+			double x = chartAxisSource.MapToXCoordinate(entry.X);
+			double y = chartAxisSource.MapToYCoordinate(entry.Y);
+			return new CGPoint(x, y);
 		}
 	}
 }

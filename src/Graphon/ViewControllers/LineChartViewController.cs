@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Foundation;
 using Graphon.Core;
 using Graphon.iOS;
 using Graphon.iOS.Views;
@@ -8,7 +9,7 @@ using UIKit;
 
 namespace Graphon.ViewControllers
 {
-	public class LineChartViewController : UIViewController, IChartDataSource
+	public class LineChartViewController : UIViewController, IChartDataSource<double, double>
 	{
 		private readonly List<(double Angle, double Amplitude)> _sineData = new List<(double Angle, double Amplitude)>();
 
@@ -27,7 +28,7 @@ namespace Graphon.ViewControllers
 
 			_sineData.Add((2 * Math.PI, Math.Sin(2 * Math.PI)));
 
-			var axisSource = new ChartAxisSource(() => _sineData.Select(x => new ChartEntry()
+			var axisSource = new ChartAxisSource(() => _sineData.Select(x => new ChartEntry<double, double>()
             {
                 X = x.Angle,
                 Y = x.Amplitude
@@ -63,23 +64,33 @@ namespace Graphon.ViewControllers
 		}
 
 		#region IChartDataSource
+		
+        public int NumberOfLines()
+        {
+			return 1;
+        }
 
-		public IEnumerable<LineData> GetChartData()
-		{
-			return new[]
-			{
-				new LineData()
-				{
-					Color = UIColor.SystemBlueColor,
-					Entries = _sineData.Select(x => new ChartEntry()
-					{
-						X = x.Angle,
-						Y = x.Amplitude
-					})
-				}
-			};
-		}
+        public int NumberOfPoints(int lineIndex)
+        {
+			return _sineData.Count;
+        }
 
-		#endregion
+        public UIColor GetLineColor(int lineIndex)
+        {
+	        return UIColor.SystemBlueColor;
+        }
+
+        public ChartEntry<double, double> GetEntry(NSIndexPath indexPath)
+        {
+	        (double angle, double amplitude) = _sineData[indexPath.Row];
+
+	        return new ChartEntry<double, double>()
+	        {
+		        X = angle,
+		        Y = amplitude
+	        };
+        }
+
+        #endregion
 	}
 }

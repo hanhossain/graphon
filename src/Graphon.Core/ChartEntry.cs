@@ -1,9 +1,11 @@
 ﻿namespace Graphon.Core
 {
-	public class ChartEntry
+	public class ChartEntry<Tx, Ty>
+		where Tx : struct
+		where Ty : struct
 	{
-		public double X { get; set; }
+		public Tx X { get; set; }
 
-		public double Y { get; set; }
+		public Ty Y { get; set; }
     }
 }
