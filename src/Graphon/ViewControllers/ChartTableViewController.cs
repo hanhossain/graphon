@@ -8,7 +8,7 @@ namespace Graphon.ViewControllers
     {
         private const string CellId = nameof(ChartTableViewController);
 
-        private readonly string[] _charts = { "Line Chart", "Line Chart (Time Series)" };
+        private readonly string[] _charts = { "Line Chart", "Line Chart (Time Series)", "Line Chart (Time Series) No Zero" };
 
         public override void ViewDidLoad()
         {
@@ -36,6 +36,7 @@ namespace Graphon.ViewControllers
             {
                 0 => new LineChartViewController(),
                 1 => new TimeSeriesViewController(),
+                2 => new TimeSeriesNoZeroViewController(),
                 _ => throw new NotImplementedException()
             };
             

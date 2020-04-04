@@ -9,16 +9,16 @@ using UIKit;
 
 namespace Graphon.ViewControllers
 {
-    public class TimeSeriesViewController : UIViewController, IChartDataSource<DateTime, double>, IChartAxisSource<DateTime, double>
+    public class TimeSeriesNoZeroViewController : UIViewController, IChartDataSource<DateTime, double>, IChartAxisSource<DateTime, double>
     {
         private readonly List<SimpleData> _data = new List<SimpleData>();
-        
+
         private BoundsContext<DateTime, double> _boundsContext;
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            Title = "Line Chart (Time Series)";
+            Title = "Line Chart (Time Series) No Zero";
             View.BackgroundColor = UIColor.SystemBackgroundColor;
 
             DateTime now = DateTime.Now;
@@ -27,7 +27,7 @@ namespace Graphon.ViewControllers
                 _data.Add(new SimpleData()
                 {
                     Timestamp = now.AddMinutes(-i),
-                    Value = i * i
+                    Value = 70 + i
                 });
             }
 
@@ -38,10 +38,10 @@ namespace Graphon.ViewControllers
             };
 
             View.AddSubview(lineChartView);
-            
+
             AddConstraints(lineChartView);
         }
-        
+
         private void AddConstraints(LineChartView<DateTime, double> lineChartView)
         {
             lineChartView.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -53,7 +53,7 @@ namespace Graphon.ViewControllers
         }
 
         #region IChartDataSource<DateTime, double>
-        
+
         public int NumberOfLines()
         {
             return 1;
@@ -78,24 +78,24 @@ namespace Graphon.ViewControllers
                 Y = data.Value
             };
         }
-        
+
         #endregion
 
         #region IChartAxisSource<DateTime, double>
-        
-        public DateTime GetXAxisValue(int index)
+
+        public DateTime GetXAxisValue(int axisIndex)
         {
-            return _data[index].Timestamp;
+            return _data[axisIndex].Timestamp;
         }
 
-        public double GetYAxisValue(int index)
+        public double GetYAxisValue(int axisIndex)
         {
-            return index;
+            return _boundsContext.YMin + axisIndex;
         }
 
         public BoundsContext<DateTime, double> GetBoundsContext()
         {
-            _boundsContext =  new BoundsContext<DateTime, double>()
+            _boundsContext = new BoundsContext<DateTime, double>()
             {
                 XMin = _data.First().Timestamp,
                 XMax = _data.Last().Timestamp,
@@ -110,15 +110,25 @@ namespace Graphon.ViewControllers
         {
             return (6, (int)(_boundsContext.YMax - _boundsContext.YMin + 1));
         }
-        
+
         double IChartAxisSource<DateTime, double>.MapToXCoordinate(DateTime value)
         {
             return value.Ticks - _boundsContext.XMin.Ticks;
         }
 
+        double IChartAxisSource<DateTime, double>.MapToYCoordinate(double value)
+        {
+            return value - _boundsContext.YMin;
+        }
+
         bool IChartAxisSource<DateTime, double>.ShouldDrawXTick(DateTime value)
         {
-            return value != _boundsContext.XMin;
+            return true;
+        }
+
+        bool IChartAxisSource<DateTime, double>.ShouldDrawXLabel(DateTime value)
+        {
+            return true;
         }
 
         string IChartAxisSource<DateTime, double>.GetXLabel(DateTime value)

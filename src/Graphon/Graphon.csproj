@@ -134,6 +134,8 @@
         <Compile Include="Extensions\UITableViewExtensions.cs" />
         <Compile Include="ViewControllers\LineChartViewController.cs" />
         <Compile Include="ViewControllers\TimeSeriesViewController.cs" />
+        <Compile Include="ViewControllers\TimeSeriesNoZeroViewController.cs" />
+        <Compile Include="SimpleData.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Graphon.iOS\Graphon.iOS.csproj">

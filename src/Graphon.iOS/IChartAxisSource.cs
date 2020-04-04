@@ -9,9 +9,9 @@ namespace Graphon.iOS
     {
         #region Required Methods
 
-        Tx GetXAxisValue(int index);
+        Tx GetXAxisValue(int axisIndex);
 
-        Ty GetYAxisValue(int index);
+        Ty GetYAxisValue(int axisIndex);
 
         BoundsContext<Tx, Ty> GetBoundsContext();
 

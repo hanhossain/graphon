@@ -13,7 +13,6 @@ namespace Graphon.iOS.Views
         where Tx : struct
         where Ty : struct
     {
-        private const int EdgeOffset = 20;
         private const int TickSize = 10;
 
         private readonly double _pointSize;
@@ -37,6 +36,8 @@ namespace Graphon.iOS.Views
             _chartAxisSource = chartAxisSource ?? throw new ArgumentNullException(nameof(chartAxisSource));
             _pointSize = 10;
         }
+
+        public UIEdgeInsets EdgeInsets { get; set; } = new UIEdgeInsets(20, 20, 20, 20);
 
         public void ReloadData()
         {
@@ -66,7 +67,9 @@ namespace Graphon.iOS.Views
 
         public override void Draw(CGRect rect)
         {
-            var chartSize = new CGSize(rect.Width - EdgeOffset * 2, rect.Height - EdgeOffset * 2);
+            nfloat horizontalInset = EdgeInsets.Left + EdgeInsets.Right;
+            nfloat verticalInset = EdgeInsets.Top + EdgeInsets.Bottom;
+            var chartSize = new CGSize(rect.Width - horizontalInset, rect.Height - verticalInset);
 
             // get bounds in original coordinate system
             var bounds = _chartAxisSource.GetBoundsContext();
@@ -81,8 +84,9 @@ namespace Graphon.iOS.Views
 
             nfloat xCoefficient = chartSize.Width / domain;
             nfloat yCoefficient = -chartSize.Height / range;
-            nfloat xDelta = (nfloat)Math.Abs(xMin) / domain * chartSize.Width + EdgeOffset;
-            nfloat yDelta = chartSize.Height - (nfloat)Math.Abs(yMin) / range * chartSize.Height + EdgeOffset;
+
+            nfloat xDelta = (nfloat)Math.Abs(xMin) / domain * chartSize.Width + EdgeInsets.Left;
+            nfloat yDelta = chartSize.Height - (nfloat)Math.Abs(yMin) / range * chartSize.Height + EdgeInsets.Top;
 
             var transform = new CGAffineTransform(xCoefficient, 0, 0, yCoefficient, xDelta, yDelta);
 
