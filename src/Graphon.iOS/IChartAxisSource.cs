@@ -15,7 +15,7 @@ namespace Graphon.iOS
 
         BoundsContext<Tx, Ty> GetBoundsContext();
 
-        (int X, int Y) GetAxisTickCount();
+        (int X, int Y) GetAxisTickCount(double width, double height);
 
         #endregion
 

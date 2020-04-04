@@ -17,7 +17,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <PackageId>Graphon.iOS</PackageId>
-        <PackageVersion>1.0.0-alpha.20200404.2</PackageVersion>
+        <PackageVersion>1.0.0-alpha.20200404.3</PackageVersion>
         <PackageProjectUrl>https://github.com/hanhossain/graphon</PackageProjectUrl>
         <PackageOutputPath>bin\package</PackageOutputPath>
         <Authors>Han Hossain</Authors>

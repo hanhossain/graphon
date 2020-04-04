@@ -56,7 +56,7 @@ namespace Graphon.iOS
             return _context;
         }
 
-        public (int X, int Y) GetAxisTickCount()
+        public (int X, int Y) GetAxisTickCount(double width, double height)
         {
             _xValues = new List<int>();
             _yValues = new List<int>();

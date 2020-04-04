@@ -105,7 +105,7 @@ namespace Graphon.ViewControllers
             return _boundsContext;
         }
 
-        public (int X, int Y) GetAxisTickCount()
+        public (int X, int Y) GetAxisTickCount(double width, double height)
         {
             return (6, (int)(_boundsContext.YMax - _boundsContext.YMin + 1));
         }

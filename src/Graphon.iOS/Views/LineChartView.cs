@@ -103,7 +103,7 @@ namespace Graphon.iOS.Views
 
             var transform = new CGAffineTransform(xCoefficient, 0, 0, yCoefficient, xDelta, yDelta);
 
-            (int xCount, int yCount) = _chartAxisSource.GetAxisTickCount();
+            (int xCount, int yCount) = _chartAxisSource.GetAxisTickCount(rect.Width, rect.Height);
 
             using var context = UIGraphics.GetCurrentContext();
 
