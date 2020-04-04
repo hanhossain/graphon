@@ -1,4 +1,4 @@
-﻿namespace Graphon.Core
+﻿namespace Graphon.iOS
 {
     public class ChartEntry<Tx, Ty>
         where Tx : struct

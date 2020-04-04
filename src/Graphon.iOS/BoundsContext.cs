@@ -1,4 +1,4 @@
-namespace Graphon.Core
+namespace Graphon.iOS
 {
     public class BoundsContext<Tx, Ty>
         where Tx : struct

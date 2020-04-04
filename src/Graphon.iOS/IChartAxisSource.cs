@@ -1,5 +1,5 @@
 ﻿using System;
-using Graphon.Core;
+using Graphon.iOS;
 
 namespace Graphon.iOS
 {

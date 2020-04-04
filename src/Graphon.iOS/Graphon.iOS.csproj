@@ -50,6 +50,8 @@
         <Folder Include="Extensions\" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="BoundsContext.cs" />
+        <Compile Include="ChartEntry.cs" />
         <Compile Include="LineData.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Views\DataPointView.cs" />
@@ -60,12 +62,6 @@
         <Compile Include="IChartDataSource.cs" />
         <Compile Include="IChartAxisSource.cs" />
         <Compile Include="ChartAxisSource.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">
-            <Project>{6C883442-CA90-4C2F-B940-072FCBDD4C9D}</Project>
-            <Name>Graphon.Core</Name>
-        </ProjectReference>
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="NuGet.Build.Tasks.Pack">
