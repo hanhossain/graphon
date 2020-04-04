@@ -23,11 +23,18 @@ namespace Graphon.iOS.Views
 
         private IEnumerable<IEnumerable<(ChartEntry<Tx, Ty> Entry, DataPointView View)>> _entries;
         private bool _completedInitialLoad;
+        private bool _hasData;
 
         private readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
         {
             ForegroundColor = UIColor.SystemGrayColor,
             Font = UIFont.PreferredCaption2
+        };
+
+        private readonly UIStringAttributes _noDataStringAttributes = new UIStringAttributes()
+        {
+            ForegroundColor = UIColor.SystemRedColor,
+            Font = UIFont.PreferredTitle1
         };
 
         public LineChartView(IChartDataSource<Tx, Ty> chartDataSource, IChartAxisSource<Tx, Ty> chartAxisSource)
@@ -67,6 +74,12 @@ namespace Graphon.iOS.Views
 
         public override void Draw(CGRect rect)
         {
+            if (!_hasData)
+            {
+                DrawNoDataLabel(rect);
+                return;
+            }
+
             nfloat horizontalInset = EdgeInsets.Left + EdgeInsets.Right;
             nfloat verticalInset = EdgeInsets.Top + EdgeInsets.Bottom;
             var chartSize = new CGSize(rect.Width - horizontalInset, rect.Height - verticalInset);
@@ -109,7 +122,9 @@ namespace Graphon.iOS.Views
 
         private void LoadData()
         {
+            _hasData = false;
             int lineCount = _chartDataSource.NumberOfLines();
+
             for (int lineIndex = 0; lineIndex < lineCount; lineIndex++)
             {
                 UIColor color = _chartDataSource.GetLineColor(lineIndex);
@@ -118,6 +133,7 @@ namespace Graphon.iOS.Views
                 var entries = new List<ChartEntry<Tx, Ty>>();
                 for (int pointIndex = 0; pointIndex < pointCount; pointIndex++)
                 {
+                    _hasData = true;
                     var indexPath = NSIndexPath.FromRowSection(pointIndex, lineIndex);
                     entries.Add(_chartDataSource.GetEntry(indexPath));
                 }
@@ -223,6 +239,15 @@ namespace Graphon.iOS.Views
             var leading = leadingTransform.TransformPoint(transformedPoint);
             var trailing = trailingTransform.TransformPoint(transformedPoint);
             context.AddLines(new[] { leading, trailing });
+        }
+
+        private void DrawNoDataLabel(CGRect rect)
+        {
+            var label = (NSString)"No Data";
+            var labelSize = label.GetSizeUsingAttributes(_noDataStringAttributes);
+
+            var point = new CGPoint(rect.GetMidX() - labelSize.Width / 2, rect.GetMidY());
+            label.DrawString(point, _noDataStringAttributes);
         }
 
         private void DrawXLabel(Tx value, CGAffineTransform transform)

@@ -136,6 +136,7 @@
         <Compile Include="ViewControllers\TimeSeriesViewController.cs" />
         <Compile Include="ViewControllers\TimeSeriesNoZeroViewController.cs" />
         <Compile Include="SimpleData.cs" />
+        <Compile Include="ViewControllers\TimeSeriesNoDataViewController.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Graphon.iOS\Graphon.iOS.csproj">
