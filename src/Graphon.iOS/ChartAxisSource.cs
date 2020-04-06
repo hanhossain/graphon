@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graphon.iOS;
 
 namespace Graphon.iOS
 {
@@ -56,7 +55,7 @@ namespace Graphon.iOS
             return _context;
         }
 
-        public (int X, int Y) GetAxisTickCount(double width, double height)
+        public (int X, int Y) GetAxisTickCount(double width, double height, double scale)
         {
             _xValues = new List<int>();
             _yValues = new List<int>();

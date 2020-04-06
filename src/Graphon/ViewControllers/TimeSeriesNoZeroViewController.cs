@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Foundation;
 using Graphon.iOS;
@@ -13,6 +14,8 @@ namespace Graphon.ViewControllers
         private readonly List<SimpleData> _data = new List<SimpleData>();
 
         private BoundsContext<DateTime, double> _boundsContext;
+        private DateTime[] _xAxisValues;
+        private double[] _yAxisValues;
 
         public override void ViewDidLoad()
         {
@@ -33,7 +36,7 @@ namespace Graphon.ViewControllers
             var lineChartView = new LineChartView<DateTime, double>(this, this)
             {
                 BackgroundColor = UIColor.SystemBackgroundColor,
-                EdgeInsets = new UIEdgeInsets(30, 30, 30, 30)
+                EdgeInsets = new UIEdgeInsets(30, 50, 30, 30)
             };
 
             View.AddSubview(lineChartView);
@@ -84,12 +87,12 @@ namespace Graphon.ViewControllers
 
         public DateTime GetXAxisValue(int axisIndex)
         {
-            return _data[axisIndex].Timestamp;
+            return _xAxisValues[axisIndex];
         }
 
         public double GetYAxisValue(int axisIndex)
         {
-            return _boundsContext.YMin + axisIndex;
+            return _yAxisValues[axisIndex];
         }
 
         public BoundsContext<DateTime, double> GetBoundsContext()
@@ -105,9 +108,32 @@ namespace Graphon.ViewControllers
             return _boundsContext;
         }
 
-        public (int X, int Y) GetAxisTickCount(double width, double height)
+        public (int X, int Y) GetAxisTickCount(double width, double height, double scale)
         {
-            return (6, (int)(_boundsContext.YMax - _boundsContext.YMin + 1));
+            int xTicks = (int)(6 * scale);
+            int yTicks = 12;
+
+            // calculate x axis values
+            long deltaX = (_boundsContext.XMax.Ticks - _boundsContext.XMin.Ticks) / (xTicks - 1);
+            _xAxisValues = new DateTime[xTicks];
+
+            for (int i = 0; i < xTicks; i++)
+            {
+                long ticks = _boundsContext.XMin.Ticks + deltaX * i;
+                _xAxisValues[i] = new DateTime(ticks);
+            }
+
+            // calculate y axis values
+            double deltaY = (_boundsContext.YMax - _boundsContext.YMin) / (yTicks - 1);
+            _yAxisValues = new double[yTicks];
+
+            for (int i = 0; i < yTicks; i++)
+            {
+                _yAxisValues[i] = _boundsContext.YMin + deltaY * i;
+            }
+
+
+            return (xTicks, yTicks);
         }
 
         double IChartAxisSource<DateTime, double>.MapToXCoordinate(DateTime value)
@@ -120,19 +146,14 @@ namespace Graphon.ViewControllers
             return value - _boundsContext.YMin;
         }
 
-        bool IChartAxisSource<DateTime, double>.ShouldDrawXTick(DateTime value)
-        {
-            return true;
-        }
-
-        bool IChartAxisSource<DateTime, double>.ShouldDrawXLabel(DateTime value)
-        {
-            return true;
-        }
-
         string IChartAxisSource<DateTime, double>.GetXLabel(DateTime value)
         {
-            return value.ToShortTimeString();
+            return value.ToLocalTime().ToString("T", CultureInfo.CurrentCulture);
+        }
+
+        string IChartAxisSource<DateTime, double>.GetYLabel(double value)
+        {
+            return value.ToString("N2");
         }
 
         #endregion

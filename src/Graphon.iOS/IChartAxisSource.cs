@@ -1,5 +1,4 @@
 ﻿using System;
-using Graphon.iOS;
 
 namespace Graphon.iOS
 {
@@ -15,7 +14,7 @@ namespace Graphon.iOS
 
         BoundsContext<Tx, Ty> GetBoundsContext();
 
-        (int X, int Y) GetAxisTickCount(double width, double height);
+        (int X, int Y) GetAxisTickCount(double width, double height, double scale);
 
         #endregion
 

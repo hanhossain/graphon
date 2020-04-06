@@ -143,10 +143,6 @@
             <Project>{56FDB5FB-8180-41F0-A158-4EC3967A18A9}</Project>
             <Name>Graphon.iOS</Name>
         </ProjectReference>
-        <ProjectReference Include="..\Graphon.Core\Graphon.Core.csproj">
-        <Project>{6C883442-CA90-4C2F-B940-072FCBDD4C9D}</Project>
-            <Name>Graphon.Core</Name>
-        </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

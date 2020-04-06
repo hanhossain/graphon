@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using CoreGraphics;
 using Foundation;
-using Graphon.iOS;
 using Graphon.iOS.Extensions;
 using UIKit;
 
@@ -25,6 +24,8 @@ namespace Graphon.iOS.Views
         private bool _completedInitialLoad;
         private bool _hasData;
 
+        private nfloat _scale = 1;
+
         private readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
         {
             ForegroundColor = UIColor.SystemGrayColor,
@@ -42,6 +43,9 @@ namespace Graphon.iOS.Views
             _chartDataSource = chartDataSource ?? throw new ArgumentNullException(nameof(chartDataSource));
             _chartAxisSource = chartAxisSource ?? throw new ArgumentNullException(nameof(chartAxisSource));
             _pointSize = 10;
+
+            var pinchRecognizer = new UIPinchGestureRecognizer(HandlePinchGesture);
+            AddGestureRecognizer(pinchRecognizer);
         }
 
         public UIEdgeInsets EdgeInsets { get; set; } = new UIEdgeInsets(20, 20, 20, 20);
@@ -56,6 +60,22 @@ namespace Graphon.iOS.Views
             }
 
             LoadData();
+        }
+
+        private void HandlePinchGesture(UIPinchGestureRecognizer gesture)
+        {
+            if (gesture.State == UIGestureRecognizerState.Began || gesture.State == UIGestureRecognizerState.Changed)
+            {
+                _scale *= gesture.Scale;
+                gesture.Scale = 1;
+
+                if (_scale < 1)
+                {
+                    _scale = 1;
+                }
+
+                SetNeedsDisplay();
+            }
         }
 
         public override void LayoutSubviews()
@@ -102,8 +122,9 @@ namespace Graphon.iOS.Views
             nfloat yDelta = chartSize.Height - (nfloat)Math.Abs(yMin) / range * chartSize.Height + EdgeInsets.Top;
 
             var transform = new CGAffineTransform(xCoefficient, 0, 0, yCoefficient, xDelta, yDelta);
+            transform = CGAffineTransform.Scale(transform, _scale, 1);
 
-            (int xCount, int yCount) = _chartAxisSource.GetAxisTickCount(rect.Width, rect.Height);
+            (int xCount, int yCount) = _chartAxisSource.GetAxisTickCount(rect.Width, rect.Height, _scale);
 
             using var context = UIGraphics.GetCurrentContext();
 
