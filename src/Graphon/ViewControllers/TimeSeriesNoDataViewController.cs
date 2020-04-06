@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Foundation;
 using Graphon.iOS;
 using Graphon.iOS.Views;
@@ -10,10 +8,6 @@ namespace Graphon.ViewControllers
 {
     public class TimeSeriesNoDataViewController : UIViewController, IChartDataSource<DateTime, double>, IChartAxisSource<DateTime, double>
     {
-        private readonly List<SimpleData> _data;
-
-        private BoundsContext<DateTime, double> _boundsContext;
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -60,12 +54,7 @@ namespace Graphon.ViewControllers
 
         public ChartEntry<DateTime, double> GetEntry(NSIndexPath indexPath)
         {
-            var data = _data[indexPath.Row];
-            return new ChartEntry<DateTime, double>()
-            {
-                X = data.Timestamp,
-                Y = data.Value
-            };
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -74,55 +63,22 @@ namespace Graphon.ViewControllers
 
         public DateTime GetXAxisValue(int axisIndex)
         {
-            return _data[axisIndex].Timestamp;
+            throw new NotImplementedException();
         }
 
         public double GetYAxisValue(int axisIndex)
         {
-            return _boundsContext.YMin + axisIndex;
+            throw new NotImplementedException();
         }
 
         public BoundsContext<DateTime, double> GetBoundsContext()
         {
-            _boundsContext = new BoundsContext<DateTime, double>()
-            {
-                XMin = _data.First().Timestamp,
-                XMax = _data.Last().Timestamp,
-                YMin = _data.Min(x => x.Value),
-                YMax = _data.Max(x => x.Value)
-            };
-
-            return _boundsContext;
+            throw new NotImplementedException();
         }
 
-        public (int X, int Y) GetAxisTickCount(double width, double height)
+        public (int X, int Y) GetAxisTickCount(double width, double height, double scale)
         {
-            return (6, (int)(_boundsContext.YMax - _boundsContext.YMin + 1));
-        }
-
-        double IChartAxisSource<DateTime, double>.MapToXCoordinate(DateTime value)
-        {
-            return value.Ticks - _boundsContext.XMin.Ticks;
-        }
-
-        double IChartAxisSource<DateTime, double>.MapToYCoordinate(double value)
-        {
-            return value - _boundsContext.YMin;
-        }
-
-        bool IChartAxisSource<DateTime, double>.ShouldDrawXTick(DateTime value)
-        {
-            return true;
-        }
-
-        bool IChartAxisSource<DateTime, double>.ShouldDrawXLabel(DateTime value)
-        {
-            return true;
-        }
-
-        string IChartAxisSource<DateTime, double>.GetXLabel(DateTime value)
-        {
-            return value.ToShortTimeString();
+            throw new NotImplementedException();
         }
 
         #endregion
