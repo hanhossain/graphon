@@ -17,6 +17,7 @@ namespace Graphon.iOS.Views
         private readonly double _pointSize;
         private readonly IChartDataSource<Tx, Ty> _chartDataSource;
         private readonly IChartAxisSource<Tx, Ty> _chartAxisSource;
+        private readonly CGPoint _origin = new CGPoint(0, 0);
 
         private readonly List<LineData<Tx, Ty>> _lines = new List<LineData<Tx, Ty>>();
 
@@ -25,6 +26,7 @@ namespace Graphon.iOS.Views
         private bool _hasData;
 
         private nfloat _scale = 1;
+        private CGPoint _translation = new CGPoint(0, 0);
 
         private readonly UIStringAttributes _axisStringAttributes = new UIStringAttributes()
         {
@@ -46,6 +48,9 @@ namespace Graphon.iOS.Views
 
             var pinchRecognizer = new UIPinchGestureRecognizer(HandlePinchGesture);
             AddGestureRecognizer(pinchRecognizer);
+
+            var panRecognizer = new UIPanGestureRecognizer(HandleDragGesture);
+            AddGestureRecognizer(panRecognizer);
         }
 
         public UIEdgeInsets EdgeInsets { get; set; } = new UIEdgeInsets(20, 20, 20, 20);
@@ -60,22 +65,6 @@ namespace Graphon.iOS.Views
             }
 
             LoadData();
-        }
-
-        private void HandlePinchGesture(UIPinchGestureRecognizer gesture)
-        {
-            if (gesture.State == UIGestureRecognizerState.Began || gesture.State == UIGestureRecognizerState.Changed)
-            {
-                _scale *= gesture.Scale;
-                gesture.Scale = 1;
-
-                if (_scale < 1)
-                {
-                    _scale = 1;
-                }
-
-                SetNeedsDisplay();
-            }
         }
 
         public override void LayoutSubviews()
@@ -118,7 +107,7 @@ namespace Graphon.iOS.Views
             nfloat xCoefficient = chartSize.Width / domain;
             nfloat yCoefficient = -chartSize.Height / range;
 
-            nfloat xDelta = (nfloat)Math.Abs(xMin) / domain * chartSize.Width + EdgeInsets.Left;
+            nfloat xDelta = (nfloat)Math.Abs(xMin) / domain * chartSize.Width + EdgeInsets.Left + _translation.X;
             nfloat yDelta = chartSize.Height - (nfloat)Math.Abs(yMin) / range * chartSize.Height + EdgeInsets.Top;
 
             var transform = new CGAffineTransform(xCoefficient, 0, 0, yCoefficient, xDelta, yDelta);
@@ -139,6 +128,34 @@ namespace Graphon.iOS.Views
             UpdateDataPoints(transform);
 
             DrawLines(transform);
+        }
+
+        private void HandlePinchGesture(UIPinchGestureRecognizer gesture)
+        {
+            if (gesture.State == UIGestureRecognizerState.Began || gesture.State == UIGestureRecognizerState.Changed)
+            {
+                _scale *= gesture.Scale;
+                gesture.Scale = 1;
+
+                if (_scale < 1)
+                {
+                    _scale = 1;
+                }
+
+                SetNeedsDisplay();
+            }
+        }
+
+        private void HandleDragGesture(UIPanGestureRecognizer gesture)
+        {
+            if (gesture.State == UIGestureRecognizerState.Began || gesture.State == UIGestureRecognizerState.Changed)
+            {
+                var translation = gesture.TranslationInView(this);
+                _translation.X += translation.X;
+                gesture.SetTranslation(_origin, this);
+
+                SetNeedsDisplay();
+            }
         }
 
         private void LoadData()
